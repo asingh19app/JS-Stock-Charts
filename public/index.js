@@ -4,7 +4,7 @@ async function main() {
     const highestPriceChartCanvas = document.querySelector('#highest-price-chart');
     const averagePriceChartCanvas = document.querySelector('#average-price-chart');
 
-    let stockData = await fetch('https://api.twelvedata.com/time_series?symbol=GME,MSFT,DIS,BNTX&interval=1day&apikey=247179fb92b04d81918866c805360b28')
+    let stockData = await fetch('https://api.twelvedata.com/time_series?symbol=GME,MSFT,DIS,BNTX&interval=1day&apikey='+ key)
 let stockDataText =  await stockData.json()
 
 console.log(stockDataText)
@@ -52,6 +52,7 @@ new Chart(highestPriceChartCanvas.getContext('2d'),{
         datasets: stocks.map(stock => ({
             label: stock.meta.symbol,
             data:[greatest(stock)],
+            //chart.js expects an array -maybe
             backgroundColor : getColor(stock.meta.symbol),
             borderColor: getColor(stock.meta.symbol)
         }))
@@ -71,11 +72,12 @@ new Chart(highestPriceChartCanvas.getContext('2d'),{
 function greatest(stock) {
 
     let highest = 0
-    stock.values.forEach(value => {
-        if(value.high > highest) {
-            highest = value.high
+    stock.values.forEach(day => {
+        if(day.high > highest) {
+            highest = day.high
         
         }
+        //for each item inthe array, those days hav various infos, comapres first day, then sets to that value and compares over gain until highets value is reached
 
     })
     console.log(highest)
