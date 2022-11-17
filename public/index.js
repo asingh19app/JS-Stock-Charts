@@ -45,19 +45,32 @@ new Chart(timeChartCanvas.getContext('2d'), {
 
 
 
-new Chart(highestPriceChartCanvas.getContext('2d'),{
-    type:'bar',
-    data: {
-        labels: stocks.map(stock => stock.meta.symbol),
-        datasets: stocks.map(stock => ({
-            label: stock.meta.symbol,
-            data:[greatest(stock)],
-            //chart.js expects an array -maybe
-            backgroundColor : getColor(stock.meta.symbol),
-            borderColor: getColor(stock.meta.symbol)
-        }))
+
+ const data = {
+labels: stocks.map(stock => stock.meta.symbol),
+datasets: [
+    {
+        label: 'Highest Stock Price',
+        data: stocks.map(stock => greatest(stock)), //[highPrice0, highRprice1]
+        backgroundColor: stocks.map(stock => getColor(stock.meta.symbol)),
+        borderColor: stocks.map(stock => getColor(stock.meta.symbol))
     }
-})
+]
+          }
+
+          new Chart(highestPriceChartCanvas.getConetext('2d'),{
+            type:'bar',
+            data: data
+          })
+        
+
+
+
+//chart.js expects an array -maybe
+//bar chart type - might have few columns, and each of these arrays may have same number of elements, we iwll get an object wihich is one sngle array which will spread it across, within that dataset we are doing somehting similiar in data
+
+
+
 
 
 // You can find documentation for bar charts in ChartJS's documentation.
@@ -77,7 +90,7 @@ function greatest(stock) {
             highest = day.high
         
         }
-        //for each item inthe array, those days hav various infos, comapres first day, then sets to that value and compares over gain until highets value is reached
+        //for each item in the array, those days hav various infos, comapares first day, then sets to that value and compares over gain until highest value is reached
 
     })
     console.log(highest)
